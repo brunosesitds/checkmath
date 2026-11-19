@@ -1,0 +1,13 @@
+<!DOCTYPE html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Passarinho Voador</title><body style="margin:0;background:#101018;display:grid;place-items:center;height:100vh;color:#fff;font:16px system-ui;text-align:center"><div><canvas id="c" style="background:#1b1b2b;max-width:95vw;max-height:80vh" width="320" height="480"></canvas><div id="s"></div></div><script>const c=document.getElementById("c"),x=c.getContext("2d"),s=document.getElementById("s");
+const W=320,H=480;let y,v,pp,sc,over,t;
+function reset(){y=200;v=0;pp=[];sc=0;over=false;t=0}
+function flap(){if(over)reset();else v=-6.5}
+addEventListener("keydown",e=>{if(e.key==" "){e.preventDefault();flap()}});c.addEventListener("pointerdown",flap);
+function loop(){if(!over){v+=.4;y+=v;t++;if(t%90==0)pp.push({x:W,g:80+Math.random()*(H-300)});
+ pp.forEach(q=>{q.x-=2.5;if(60+12>q.x&&60-12<q.x+50&&(y-12<q.g||y+12>q.g+130))over=true;if(!q.s&&q.x+50<60){q.s=1;sc++}});
+ pp=pp.filter(q=>q.x>-50);if(y>H||y<0)over=true}
+ x.clearRect(0,0,W,H);x.fillStyle="#3b3";pp.forEach(q=>{x.fillRect(q.x,0,50,q.g);x.fillRect(q.x,q.g+130,50,H)});
+ x.fillStyle="#fd3";x.beginPath();x.arc(60,y,12,0,7);x.fill();
+ s.textContent=over?"Fim! Pontos "+sc+" — espaço/toque reinicia":"Pontos "+sc+" — espaço ou toque";requestAnimationFrame(loop)}
+reset();loop();
+</script>

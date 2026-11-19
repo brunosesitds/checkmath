@@ -1,0 +1,8 @@
+[
+  {"id":"snake","title":"Snake","type":"html","path":"games/snake/index.html","tags":["Arcade","Casual"],"emoji":"🐍"},
+  {"id":"pingpong","title":"Ping Pong Arcade","type":"html","path":"games/pingpong/index.html","tags":["Arcade","Sports"],"emoji":"🏓"},
+  {"id":"tijolos","title":"Quebra-Tijolos","type":"html","path":"games/tijolos/index.html","tags":["Arcade","Casual"],"emoji":"🧱"},
+  {"id":"passaro","title":"Passarinho Voador","type":"html","path":"games/passaro/index.html","tags":["Casual","Clicker"],"emoji":"🐤"},
+  {"id":"clicker","title":"Clicker Demo","type":"html","path":"games/clicker/index.html","tags":["Clicker","Casual"],"emoji":"👆"},
+  {"id":"firered","title":"Pokémon FireRed (BR)","type":"rom","core":"gba","path":"roms/Pokemon_-_Fire_Red__BR_.gba","tags":["Emulator","RPG"],"emoji":"🔥"}
+]

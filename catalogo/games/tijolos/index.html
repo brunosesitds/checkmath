@@ -1,0 +1,16 @@
+<!DOCTYPE html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Quebra-Tijolos</title><body style="margin:0;background:#101018;display:grid;place-items:center;height:100vh;color:#fff;font:16px system-ui;text-align:center"><div><canvas id="c" style="background:#1b1b2b;max-width:95vw;max-height:80vh" width="480" height="360"></canvas><div id="s"></div></div><script>const c=document.getElementById("c"),x=c.getContext("2d"),s=document.getElementById("s");
+const W=480,H=360,k={};let px=200,b,br,sc,lives;
+function nb(){b={x:240,y:300,vx:3,vy:-3}}
+function reset(){px=200;nb();br=[];for(let r=0;r<5;r++)for(let i=0;i<8;i++)br.push({x:i*60+4,y:r*22+30,w:52,h:16,a:1});sc=0;lives=3}
+addEventListener("keydown",e=>{k[e.key]=1;if(e.key.startsWith("Arrow"))e.preventDefault()});addEventListener("keyup",e=>k[e.key]=0);
+c.addEventListener("mousemove",e=>{const r=c.getBoundingClientRect();px=(e.clientX-r.left)*W/r.width-40});
+function loop(){if(k.ArrowLeft||k.a)px-=6;if(k.ArrowRight||k.d)px+=6;px=Math.max(0,Math.min(W-80,px));
+ b.x+=b.vx;b.y+=b.vy;if(b.x<4||b.x>W-4)b.vx*=-1;if(b.y<4)b.vy*=-1;
+ if(b.vy>0&&b.y>H-24&&b.y<H-12&&b.x>px&&b.x<px+80){b.vy=-Math.abs(b.vy);b.vx=(b.x-px-40)/8}
+ br.forEach(t=>{if(t.a&&b.x>t.x&&b.x<t.x+t.w&&b.y>t.y&&b.y<t.y+t.h){t.a=0;b.vy*=-1;sc++}});
+ if(b.y>H){lives--;nb();if(!lives)reset()}if(br.every(t=>!t.a))reset();
+ x.clearRect(0,0,W,H);br.forEach((t,i)=>{if(t.a){x.fillStyle="hsl("+(i/8|0)*60+" 70% 55%)";x.fillRect(t.x,t.y,t.w,t.h)}});
+ x.fillStyle="#fff";x.fillRect(px,H-16,80,8);x.beginPath();x.arc(b.x,b.y,5,0,7);x.fill();
+ s.textContent="Pontos "+sc+" · Vidas "+lives+" — mouse ou setas";requestAnimationFrame(loop)}
+reset();loop();
+</script>

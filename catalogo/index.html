@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Catálogo de Jogos</title>
+<style>
+:root{--bg:#14141c;--card:#23232f;--fg:#eee;--mut:#9a9aaa;--acc:#7c5cff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif}
+header{padding:16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+h1{margin:0;font-size:20px;flex:1}
+#q{padding:10px 14px;border-radius:999px;border:0;background:var(--card);color:var(--fg);min-width:220px}
+#chips{padding:0 16px 8px;display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:6px 14px;border-radius:999px;background:var(--card);color:var(--fg);border:0;cursor:pointer}
+.chip.on{background:var(--acc)}
+#grid{padding:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px}
+.card{background:var(--card);border-radius:12px;overflow:hidden;text-decoration:none;color:var(--fg);transition:transform .15s}
+.card:hover{transform:translateY(-4px)}
+.cover{aspect-ratio:1;display:grid;place-items:center;font-size:56px;background:linear-gradient(135deg,var(--c1),var(--c2))}
+.cover img{width:100%;height:100%;object-fit:cover}
+.t{padding:8px 10px;font-size:14px}
+</style><script src="auth.js"></script></head><body>
+<header><h1>🎮 Catálogo de Jogos</h1><input id="q" placeholder="Buscar jogo…"></header>
+<div id="chips"></div><div id="grid"></div>
+<script>
+let games=[],tag="Todos";
+const hue=s=>[...s].reduce((a,c)=>a+c.charCodeAt(0),0)%360;
+function render(){
+  const q=document.getElementById("q").value.toLowerCase();
+  grid.innerHTML="";
+  games.filter(g=>(tag=="Todos"||g.tags.includes(tag))&&g.title.toLowerCase().includes(q)).forEach(g=>{
+    const a=document.createElement("a");a.className="card";a.href="play.html?id="+encodeURIComponent(g.id);
+    const h=hue(g.id);
+    a.innerHTML=`<div class="cover" style="--c1:hsl(${h} 60% 35%);--c2:hsl(${(h+50)%360} 60% 25%)">${g.cover?`<img src="${g.cover}" alt="">`:(g.emoji||"🎮")}</div><div class="t"></div>`;
+    a.querySelector(".t").textContent=g.title;grid.appendChild(a);
+  });
+}
+function chips(){
+  const tags=["Todos",...new Set(games.flatMap(g=>g.tags))];
+  chipsEl.innerHTML="";tags.forEach(t=>{const b=document.createElement("button");b.className="chip"+(t==tag?" on":"");b.textContent=t;b.onclick=()=>{tag=t;chips();render()};chipsEl.appendChild(b)});
+}
+const chipsEl=document.getElementById("chips"),grid=document.getElementById("grid");
+document.getElementById("q").oninput=render;
+fetch("games.json").then(r=>r.json()).then(j=>{games=j;chips();render()})
+ .catch(()=>grid.textContent="Não consegui ler games.json. Rode um servidor local (python -m http.server).");
+</script></body></html>
